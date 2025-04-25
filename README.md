@@ -25,22 +25,22 @@
 
 ```bash
 # Генерация всех типов секретов
-python src/main.py --all
+python3 src/main.py --all
 
 # Генерация только JWT HMAC секрета
-python src/main.py --jwt-hmac
+python3 src/main.py --jwt-hmac
 
 # Генерация RSA ключей для JWT
-python src/main.py --jwt-rsa
+python3 src/main.py --jwt-rsa
 
 # Генерация 3 паролей для баз данных
-python src/main.py --db-pass 3
+python3 src/main.py --db-pass 3
 
 # Генерация секретов приложения
-python src/main.py --app-secrets
+python3 src/main.py --app-secrets
 
 # Сохранение результатов в файл
-python src/main.py --all --output secrets.txt
+python3 src/main.py --all --output secrets.txt
 ```
 
 ## 🔒 Лучшие практики безопасности
@@ -52,8 +52,8 @@ python src/main.py --all --output secrets.txt
 ## 🧪 Разработка
 
 - Юнит-тесты для проверки функциональности
-- Установка зависимостей: pip install -r requirements.txt
-- Запуск тестов: python -m unittest discover tests
+- Установка зависимостей: `pip install -r requirements.txt`
+- Запуск тестов: `python3 -m unittest discover tests`
 
 ## 📜 Лицензия
 
