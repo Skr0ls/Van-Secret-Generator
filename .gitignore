@@ -1,4 +1,4 @@
-# Сгенерированные секреты
+# Generated secrets
 *.secrets
 *.key
 *.pem
@@ -10,7 +10,6 @@ __pycache__/
 *$py.class
 *.so
 .Python
-env/
 build/
 develop-eggs/
 dist/
@@ -26,9 +25,14 @@ var/
 .installed.cfg
 *.egg
 
-# Виртуальное окружение
+# Virtual environments
+.venv/
 venv/
 ENV/
+
+# Tooling caches
+.pytest_cache/
+.ruff_cache/
 
 # IDE
 .idea/

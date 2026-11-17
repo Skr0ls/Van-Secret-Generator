@@ -1,0 +1,53 @@
+[project]
+name = "van-secret-generator"
+version = "0.1.0"
+description = "Secure generation of critical secrets for production environments"
+readme = "README.md"
+license = { file = "LICENSE" }
+authors = [{ name = "Dmitry" }]
+keywords = ["security", "secrets", "jwt", "password"]
+requires-python = ">=3.10"
+dependencies = [
+    "cryptography>=39.0.0",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+]
+
+[project.scripts]
+secret-generator = "secret_generator.cli:main"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0.0",
+    "ruff>=0.8.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/secret_generator"]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 100
+
+[tool.ruff.lint]
+extend-select = ["I"]
+
+[tool.ruff.lint.per-file-ignores]
+# Intentional catch-all handlers at the CLI boundary map errors to exit codes.
+"src/secret_generator/cli.py" = ["BLE001"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

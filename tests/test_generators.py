@@ -1,44 +1,75 @@
-import unittest
+"""Tests for the secret generation functions."""
+
 import re
-from src.main import (
-    generate_random_string,
-    generate_jwt_hmac,
+
+import pytest
+from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.primitives.asymmetric import rsa
+
+from secret_generator.generators import (
     generate_db_password,
-    generate_rsa_key_pair
+    generate_jwt_hmac,
+    generate_random_string,
+    generate_rsa_key_pair,
 )
 
-class TestGenerators(unittest.TestCase):
-    
-    def test_random_string_length(self):
-        """Проверка длины генерируемых случайных строк"""
-        for length in [8, 16, 32, 64]:
-            result = generate_random_string(length)
-            self.assertEqual(len(result), length)
-    
-    def test_jwt_hmac_format(self):
-        """Проверка формата JWT HMAC секрета"""
-        result = generate_jwt_hmac()
-        # Проверка, что это валидная base64 строка
-        self.assertTrue(re.match(r'^[A-Za-z0-9_-]+=*$', result))
-    
-    def test_db_password_complexity(self):
-        """Проверка сложности паролей для БД"""
-        for _ in range(5):  # Тестирование нескольких паролей
-            password = generate_db_password()
-            self.assertTrue(any(c.islower() for c in password))
-            self.assertTrue(any(c.isupper() for c in password))
-            self.assertTrue(any(c.isdigit() for c in password))
-            self.assertTrue(any(c in "!@#$%^&*()" for c in password))
-    
-    def test_rsa_key_pair(self):
-        """Проверка корректности генерации пары RSA ключей"""
-        private, public = generate_rsa_key_pair()
-        # Проверяем, что ключи не пустые и имеют правильный формат
-        self.assertTrue(len(private) > 0)
-        self.assertTrue(len(public) > 0)
-        # Проверяем, что это действительно PEM-ключи
-        self.assertTrue('PRIVATE KEY' in private)
-        self.assertTrue('PUBLIC KEY' in public)
+ALLOWED_CHARACTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()"
 
-if __name__ == '__main__':
-    unittest.main()
+
+@pytest.mark.parametrize("length", [8, 16, 32, 64])
+def test_random_string_length(length):
+    assert len(generate_random_string(length)) == length
+
+
+def test_random_string_uses_allowed_alphabet():
+    value = generate_random_string(200)
+    assert all(char in ALLOWED_CHARACTERS for char in value)
+
+
+def test_jwt_hmac_format():
+    value = generate_jwt_hmac()
+    # 32 random bytes encoded as URL-safe base64 (43 chars + optional padding).
+    assert re.fullmatch(r"[A-Za-z0-9_-]{43}=*", value)
+
+
+def test_jwt_hmac_uniqueness():
+    assert generate_jwt_hmac() != generate_jwt_hmac()
+
+
+def test_db_password_complexity():
+    for _ in range(20):
+        password = generate_db_password()
+        assert any(c.islower() for c in password)
+        assert any(c.isupper() for c in password)
+        assert any(c.isdigit() for c in password)
+        assert any(c in "!@#$%^&*()" for c in password)
+
+
+@pytest.mark.parametrize("length", [8, 16, 24])
+def test_db_password_length(length):
+    assert len(generate_db_password(length)) == length
+
+
+def test_db_password_uniqueness():
+    passwords = {generate_db_password() for _ in range(20)}
+    assert len(passwords) == 20
+
+
+def test_rsa_key_pair_pem_headers():
+    private_pem, public_pem = generate_rsa_key_pair()
+    assert private_pem.startswith("-----BEGIN PRIVATE KEY-----")
+    assert "BEGIN RSA PRIVATE KEY" not in private_pem
+    assert public_pem.startswith("-----BEGIN PUBLIC KEY-----")
+
+
+def test_rsa_key_pair_round_trip():
+    private_pem, public_pem = generate_rsa_key_pair()
+
+    private_key = serialization.load_pem_private_key(private_pem.encode(), password=None)
+    public_key = serialization.load_pem_public_key(public_pem.encode())
+
+    assert isinstance(private_key, rsa.RSAPrivateKey)
+    assert private_key.key_size == 2048
+    assert private_key.public_key().public_numbers().e == 65537
+    # The public PEM must correspond to the private key.
+    assert public_key.public_numbers() == private_key.public_key().public_numbers()
