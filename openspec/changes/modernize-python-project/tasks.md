@@ -36,7 +36,7 @@ Each numbered group lands as one small pull request into `dev` (one or two focus
 
 ## 6. Secure output file handling (PR: `feat/secure-output`)
 
-- [ ] 6.1 Implement file saving with mode 0600 and `O_EXCL` (no silent overwrite) in `output.py`; add `--force` flag in `cli.py`. Verify: pytest — created file has mode 0600, existing file is refused (exit 1, content unchanged), `--force` overwrites.
+- [x] 6.1 Implement file saving with mode 0600 and `O_EXCL` (no silent overwrite) in `output.py`; add `--force` flag in `cli.py`. Verify: pytest — created file has mode 0600, existing file is refused (exit 1, content unchanged), `--force` overwrites.
 
 ## 7. English docs & UX (PR: `docs/english`)
 
