@@ -11,11 +11,14 @@ import string
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import rsa
 
+SPECIAL_CHARACTERS = "!@#$%^&*()"
+PASSWORD_ALPHABET = string.ascii_letters + string.digits + SPECIAL_CHARACTERS
+
 
 def generate_random_string(length=32, characters=None):
     """Генерация случайной строки с заданной длиной и набором символов"""
     if characters is None:
-        characters = string.ascii_letters + string.digits + "!@#$%^&*()"
+        characters = PASSWORD_ALPHABET
     return "".join(secrets.choice(characters) for _ in range(length))
 
 
@@ -51,13 +54,12 @@ def generate_rsa_key_pair():
 
 def generate_db_password(length=16):
     """Генерация сложного пароля для СУБД"""
-    characters = string.ascii_letters + string.digits + "!@#$%^&*()"
     while True:
-        password = "".join(secrets.choice(characters) for _ in range(length))
+        password = "".join(secrets.choice(PASSWORD_ALPHABET) for _ in range(length))
         if (
             any(c.islower() for c in password)
             and any(c.isupper() for c in password)
             and any(c.isdigit() for c in password)
-            and any(c in "!@#$%^&*()" for c in password)
+            and any(c in SPECIAL_CHARACTERS for c in password)
         ):
             return password
