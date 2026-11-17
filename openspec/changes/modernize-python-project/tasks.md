@@ -17,9 +17,9 @@ Each numbered group lands as one small pull request into `dev` (one or two focus
 
 ## 3. Module split (PR: `refactor/split-modules`)
 
-- [ ] 3.1 Extract `generators.py` — pure generation functions, no IO and no `sys.exit`. Verify: `uv run python -m unittest discover tests` passes.
-- [ ] 3.2 Extract `output.py` — `format_output` and `save_to_file` with no argparse imports. Verify: unittest run passes.
-- [ ] 3.3 Reduce `cli.py` to argparse, orchestration, and `main()`; behavior unchanged. Verify: `uv run secret-generator --all` and `uv run python -m secret_generator --all` print the same section structure; unittest run passes.
+- [x] 3.1 Extract `generators.py` — pure generation functions, no IO and no `sys.exit`. Verify: `uv run python -m unittest discover tests` passes.
+- [x] 3.2 Extract `output.py` — `format_output` and `save_to_file` with no argparse imports. Verify: unittest run passes.
+- [x] 3.3 Reduce `cli.py` to argparse, orchestration, and `main()`; behavior unchanged. Verify: `uv run secret-generator --all` and `uv run python -m secret_generator --all` print the same section structure; unittest run passes.
 
 ## 4. pytest migration (PR: `test/pytest`)
 
