@@ -40,9 +40,9 @@ Each numbered group lands as one small pull request into `dev` (one or two focus
 
 ## 7. English docs & UX (PR: `docs/english`)
 
-- [ ] 7.1 Translate README fully to English (same structure: features, security notes, usage, development, license) and document the PKCS#8 key format and supported Python versions. Verify: no Cyrillic remains in `README.md`; documented commands run.
-- [ ] 7.2 Translate CLI messages, docstrings, and code comments to English. Verify: `uv run pytest` passes and no Cyrillic remains in `src/` or `tests/`.
-- [ ] 7.3 Translate `.gitignore` comments to English. Verify: no Cyrillic remains in `.gitignore`.
+- [x] 7.1 Translate README fully to English (same structure: features, security notes, usage, development, license) and document the PKCS#8 key format and supported Python versions. Verify: no Cyrillic remains in `README.md`; documented commands run.
+- [x] 7.2 Translate CLI messages, docstrings, and code comments to English. Verify: `uv run pytest` passes and no Cyrillic remains in `src/` or `tests/`.
+- [x] 7.3 Translate `.gitignore` comments to English. Verify: no Cyrillic remains in `.gitignore`.
 
 ## 8. CI & release to main (PR: `ci/github-actions`)
 
