@@ -30,7 +30,7 @@ def generate_secrets(args) -> dict[str, dict[str, str]]:
 
     # Генерация паролей БД
     if args.db_pass or args.all:
-        count = args.db_pass if args.db_pass > 0 else 2
+        count = args.db_pass if args.db_pass else 2
         secrets_data["DATABASE"] = {
             f"DB_PASSWORD_{i}": generate_db_password() for i in range(1, count + 1)
         }
@@ -45,8 +45,8 @@ def generate_secrets(args) -> dict[str, dict[str, str]]:
     return secrets_data
 
 
-def parse_arguments():
-    """Парсинг аргументов командной строки"""
+def build_parser() -> argparse.ArgumentParser:
+    """Build the CLI argument parser."""
     parser = argparse.ArgumentParser(
         description="Безопасная генерация секретов для production-окружения",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
@@ -55,7 +55,13 @@ def parse_arguments():
     parser.add_argument("--jwt-hmac", action="store_true", help="Генерация JWT HMAC секрета")
     parser.add_argument("--jwt-rsa", action="store_true", help="Генерация пары RSA ключей для JWT")
     parser.add_argument(
-        "--db-pass", type=int, default=0, help="Генерация паролей для БД (укажите количество)"
+        "--db-pass",
+        type=int,
+        nargs="?",
+        const=2,
+        default=None,
+        metavar="N",
+        help="Генерация паролей для БД (укажите количество)",
     )
     parser.add_argument(
         "--app-secrets",
@@ -65,32 +71,37 @@ def parse_arguments():
     parser.add_argument("--all", action="store_true", help="Генерация всех доступных секретов")
     parser.add_argument("--output", type=str, help="Имя выходного файла (БУДЬТЕ ОСТОРОЖНЫ С ЭТИМ!)")
 
-    return parser.parse_args()
+    return parser
 
 
-def main():
-    """Основная функция программы"""
-    args = parse_arguments()
+def main(argv=None) -> int:
+    """Run the CLI and return the process exit code."""
+    parser = build_parser()
+    args = parser.parse_args(argv)
 
-    if not any([args.jwt_hmac, args.jwt_rsa, args.db_pass, args.app_secrets, args.all]):
-        print("Не выбраны опции генерации. Используйте --help для просмотра доступных опций.")
-        sys.exit(0)
+    if args.db_pass is not None and args.db_pass < 1:
+        parser.error("--db-pass N must be a positive integer (N >= 1)")
 
-    secrets_data = generate_secrets(args)
-    formatted_output = format_output(secrets_data)
+    if not any([args.jwt_hmac, args.jwt_rsa, args.db_pass is not None, args.app_secrets, args.all]):
+        parser.error("no generation options selected (use --help to list available options)")
 
-    if args.output:
-        save_to_file(formatted_output, args.output)
-    else:
-        print(formatted_output)
+    try:
+        secrets_data = generate_secrets(args)
+        formatted_output = format_output(secrets_data)
+
+        if args.output:
+            save_to_file(formatted_output, args.output)
+        else:
+            print(formatted_output)
+    except KeyboardInterrupt:
+        print("\nОперация отменена пользователем", file=sys.stderr)
+        return 130
+    except Exception as e:
+        print(f"Непредвиденная ошибка: {e}", file=sys.stderr)
+        return 1
+
+    return 0
 
 
 if __name__ == "__main__":
-    try:
-        main()
-    except KeyboardInterrupt:
-        print("\nОперация отменена пользователем", file=sys.stderr)
-        sys.exit(130)
-    except Exception as e:
-        print(f"Непредвиденная ошибка: {e}", file=sys.stderr)
-        sys.exit(1)
+    sys.exit(main())
