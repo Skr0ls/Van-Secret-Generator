@@ -16,19 +16,19 @@ PASSWORD_ALPHABET = string.ascii_letters + string.digits + SPECIAL_CHARACTERS
 
 
 def generate_random_string(length=32, characters=None):
-    """Генерация случайной строки с заданной длиной и набором символов"""
+    """Generate a random string of the given length and character set."""
     if characters is None:
         characters = PASSWORD_ALPHABET
     return "".join(secrets.choice(characters) for _ in range(length))
 
 
 def generate_jwt_hmac():
-    """Генерация HMAC-секрета для JWT"""
+    """Generate an HMAC secret for JWT."""
     return base64.urlsafe_b64encode(secrets.token_bytes(32)).decode("utf-8")
 
 
 def generate_rsa_key_pair():
-    """Генерация пары RSA ключей (2048 бит)"""
+    """Generate an RSA key pair (2048 bits)."""
     private_key = rsa.generate_private_key(
         public_exponent=65537,
         key_size=2048,
@@ -53,7 +53,7 @@ def generate_rsa_key_pair():
 
 
 def generate_db_password(length=16):
-    """Генерация сложного пароля для СУБД"""
+    """Generate a strong database password."""
     while True:
         password = "".join(secrets.choice(PASSWORD_ALPHABET) for _ in range(length))
         if (

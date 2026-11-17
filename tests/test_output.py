@@ -28,7 +28,7 @@ def test_save_to_file_writes_content(tmp_path, capsys):
     target = tmp_path / "out.txt"
     save_to_file("secret content", str(target))
     assert target.read_text() == "secret content"
-    assert "Секреты сохранены" in capsys.readouterr().out
+    assert "Secrets saved" in capsys.readouterr().out
 
 
 def test_save_to_file_sets_owner_only_permissions(tmp_path):

@@ -90,7 +90,7 @@ def test_output_writes_file(capsys, tmp_path):
     content = target.read_text()
     assert "WARNING: THESE ARE SENSITIVE CREDENTIALS" in content
     assert "HMAC_SECRET" in content
-    assert "Секреты сохранены" in capsys.readouterr().out
+    assert "Secrets saved" in capsys.readouterr().out
     assert target.stat().st_mode & 0o777 == 0o600
 
 
