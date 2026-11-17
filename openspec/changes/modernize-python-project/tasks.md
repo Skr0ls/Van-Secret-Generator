@@ -46,7 +46,7 @@ Each numbered group lands as one small pull request into `dev` (one or two focus
 
 ## 8. CI & release to main (PR: `ci/github-actions`)
 
-- [ ] 8.1 Add `.github/workflows/ci.yml`: `lint` job (ruff check + format check) and `test` job (Python 3.10/3.12/3.14 matrix, uv setup, `uv sync`, `uv run pytest`), triggered on push and PR to `main` and `dev`. Verify: workflow runs green on the PR (`gh run list --branch dev`).
+- [x] 8.1 Add `.github/workflows/ci.yml`: `lint` job (ruff check + format check) and `test` job (Python 3.10/3.12/3.14 matrix, uv setup, `uv sync`, `uv run pytest`), triggered on push and PR to `main` and `dev`. Verify: workflow runs green on the PR (`gh run list --branch dev`).
 - [ ] 8.2 Open a release-style PR `dev` → `main`, verify CI passes on it, merge, and delete merged feature branches. Verify: CI green on `main`; `git branch -r` shows no stale feature branches.
 
 ## Workflow follow-up
