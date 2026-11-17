@@ -5,15 +5,15 @@ Each numbered group lands as one small pull request into `dev` (one or two focus
 ## 1. Gitflow & OpenSpec scaffolding (PR: `chore/gitflow-openspec`)
 
 - [x] 1.1 Create `dev` branch from `main`, push to origin. Verify: `git branch -r` lists `origin/dev`.
-- [ ] 1.2 Commit OpenSpec scaffolding (`openspec/`, `.opencode/`) to `dev` as a single `chore` commit and push. Verify: `git log origin/dev -1` shows the commit; `main` untouched.
+- [x] 1.2 Commit OpenSpec scaffolding (`openspec/`, `.opencode/`) to `dev` as a single `chore` commit and push. Verify: `git log origin/dev -1` shows the commit; `main` untouched.
 
 ## 2. uv packaging (PR: `feat/uv-packaging`)
 
-- [ ] 2.1 Create package skeleton `src/secret_generator/` (`__init__.py`, `__main__.py`, `cli.py` carrying the current `main.py` content unchanged for now); delete `src/main.py`, `setup.py`, `requirements.txt`. Verify: after 2.2, `uv run python -c "import secret_generator"` succeeds.
-- [ ] 2.2 Add `pyproject.toml` (metadata, version 0.1.0, `requires-python >= 3.10`, `cryptography` runtime dep, dev dependency group with `pytest` + `ruff`, `[project.scripts] secret-generator`, `[tool.ruff]` with `target-version = "py310"`) and generate `uv.lock` via `uv sync`. Verify: `uv sync` completes and `uv run secret-generator --jwt-hmac` prints a secret.
-- [ ] 2.3 Re-point `tests/test_generators.py` imports to `secret_generator.cli`. Verify: `uv run python -m unittest discover tests` passes.
-- [ ] 2.4 Fix all ruff findings in the repo. Verify: `uv run ruff check .` and `uv run ruff format --check .` both pass.
-- [ ] 2.5 Update the README usage block to `uv run secret-generator ...` commands (commands only; full translation lands in group 7). Verify: every command in the README usage block runs in a synced clone.
+- [x] 2.1 Create package skeleton `src/secret_generator/` (`__init__.py`, `__main__.py`, `cli.py` carrying the current `main.py` content unchanged for now); delete `src/main.py`, `setup.py`, `requirements.txt`. Verify: after 2.2, `uv run python -c "import secret_generator"` succeeds.
+- [x] 2.2 Add `pyproject.toml` (metadata, version 0.1.0, `requires-python >= 3.10`, `cryptography` runtime dep, dev dependency group with `pytest` + `ruff`, `[project.scripts] secret-generator`, `[tool.ruff]` with `target-version = "py310"`) and generate `uv.lock` via `uv sync`. Verify: `uv sync` completes and `uv run secret-generator --jwt-hmac` prints a secret.
+- [x] 2.3 Re-point `tests/test_generators.py` imports to `secret_generator.cli`. Verify: `uv run python -m unittest discover tests` passes.
+- [x] 2.4 Fix all ruff findings in the repo. Verify: `uv run ruff check .` and `uv run ruff format --check .` both pass.
+- [x] 2.5 Update the README usage block to `uv run secret-generator ...` commands (commands only; full translation lands in group 7). Verify: every command in the README usage block runs in a synced clone.
 
 ## 3. Module split (PR: `refactor/split-modules`)
 
