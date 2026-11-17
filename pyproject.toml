@@ -48,3 +48,6 @@ extend-select = ["I"]
 [tool.ruff.lint.per-file-ignores]
 # Intentional catch-all handlers at the CLI boundary map errors to exit codes.
 "src/secret_generator/cli.py" = ["BLE001"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

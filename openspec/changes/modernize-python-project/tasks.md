@@ -23,10 +23,10 @@ Each numbered group lands as one small pull request into `dev` (one or two focus
 
 ## 4. pytest migration (PR: `test/pytest`)
 
-- [ ] 4.1 Convert `test_generators.py` to pytest style (plain functions, `assert`, no `unittest.TestCase`). Verify: `uv run pytest` passes.
-- [ ] 4.2 Add `test_cli.py` covering current behavior: each selection flag alone, `--all` sections, `--db-pass N` count, output to stdout via `capsys` (monkeypatched argv, `tmp_path` for any files). Verify: `uv run pytest` passes.
-- [ ] 4.3 Add `test_output.py` for formatting (warning banner, `=== CATEGORY ===` sections) and file saving into `tmp_path`. Verify: `uv run pytest` passes.
-- [ ] 4.4 Add an RSA round-trip test: parse generated private/public PEM back with `cryptography` and assert 2048 bits / exponent 65537. Verify: `uv run pytest -k rsa` passes.
+- [x] 4.1 Convert `test_generators.py` to pytest style (plain functions, `assert`, no `unittest.TestCase`). Verify: `uv run pytest` passes.
+- [x] 4.2 Add `test_cli.py` covering current behavior: each selection flag alone, `--all` sections, `--db-pass N` count, output to stdout via `capsys` (monkeypatched argv, `tmp_path` for any files). Verify: `uv run pytest` passes.
+- [x] 4.3 Add `test_output.py` for formatting (warning banner, `=== CATEGORY ===` sections) and file saving into `tmp_path`. Verify: `uv run pytest` passes.
+- [x] 4.4 Add an RSA round-trip test: parse generated private/public PEM back with `cryptography` and assert 2048 bits / exponent 65537. Verify: `uv run pytest -k rsa` passes.
 
 ## 5. Crypto & error-handling fixes (PR: `fix/crypto-errors`)
 
