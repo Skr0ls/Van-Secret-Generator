@@ -1,60 +1,67 @@
-# 🔐 Van-Secret Generator — Генератор продакшен секретов
+# 🔐 Van-Secret Generator — Production Secret Generator
 
-**Защити свой ♂️Dungeon♂️**
+**Protect your ♂️Dungeon♂️**
 
-# Безопасная генерация критически важных секретов для production-окружения
+# Secure generation of critical secrets for production environments
 
 ![License](https://img.shields.io/badge/License-MIT-green)
-![Python](https://img.shields.io/badge/Python-3.8%2B-blueviolet)
+![Python](https://img.shields.io/badge/Python-3.10%2B-blueviolet)
 
-## 🚀 Основные возможности
+## 🚀 Features
 
-- Генерация JWT-ключей (HMAC/RSA-2048)
-- Создание сложных паролей для СУБД
-- Формирование общих секретов приложения (SECRET_KEY, API_KEY)
-- Криптографически безопасные алгоритмы
-- Гибкий CLI-интерфейс с выбором параметров
+- JWT key generation (HMAC / RSA-2048, private keys in PKCS#8 PEM format)
+- Strong password generation for databases
+- Application secrets (SECRET_KEY, API_KEY)
+- Cryptographically secure algorithms
+- Flexible CLI with selectable options
 
-## 🛡️ Безопасность
+## 🛡️ Security
 
-- Реализация на базе `cryptography` и `secrets`
-- Автоматическая проверка сложности паролей для БД
-- Использование современных криптографических методов
+- Built on `cryptography` and `secrets`
+- Automatic complexity checks for database passwords
+- Modern cryptographic methods
+- Output files are written with owner-only permissions (0600) and are never silently overwritten
 
-## ⚙️ Использование
+## ⚙️ Usage
+
+Requires Python 3.10+ and [uv](https://docs.astral.sh/uv/).
 
 ```bash
-# Генерация всех типов секретов
+# Generate all secret types
 uv run secret-generator --all
 
-# Генерация только JWT HMAC секрета
+# Generate only the JWT HMAC secret
 uv run secret-generator --jwt-hmac
 
-# Генерация RSA ключей для JWT
+# Generate RSA keys for JWT
 uv run secret-generator --jwt-rsa
 
-# Генерация 3 паролей для баз данных
+# Generate 3 database passwords
 uv run secret-generator --db-pass 3
 
-# Генерация секретов приложения
+# Generate application secrets
 uv run secret-generator --app-secrets
 
-# Сохранение результатов в файл
+# Save results to a file
 uv run secret-generator --all --output secrets.txt
+
+# Overwrite an existing output file
+uv run secret-generator --all --output secrets.txt --force
 ```
 
-## 🔒 Лучшие практики безопасности
+## 🔒 Security best practices
 
-- 🔑 Никогда не коммитьте сгенерированные секреты
-- 🛡️ Используйте секретное хранилище (Vault, AWS Secrets Manager)
-- 🔄 Регулярно ротируйте ключи
+- 🔑 Never commit generated secrets
+- 🛡️ Use a secret store (Vault, AWS Secrets Manager)
+- 🔄 Rotate keys regularly
 
-## 🧪 Разработка
+## 🧪 Development
 
-- Юнит-тесты для проверки функциональности
-- Установка зависимостей: `uv sync`
-- Запуск тестов: `uv run python -m unittest discover tests`
+- Unit tests cover generators, CLI behavior, and output handling
+- Install dependencies: `uv sync`
+- Run tests: `uv run pytest`
+- Lint and format: `uv run ruff check .` and `uv run ruff format .`
 
-## 📜 Лицензия
+## 📜 License
 
-Распространяется под лицензией MIT. Используйте с осторожностью — разработчики не несут ответственности за последствия неправильного хранения секретов.
+Distributed under the MIT license. Use with care — the authors are not liable for the consequences of improperly stored secrets.
