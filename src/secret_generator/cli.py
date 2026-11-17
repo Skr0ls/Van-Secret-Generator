@@ -4,7 +4,6 @@ Secret Generator - Безопасная генерация критически 
 
 import argparse
 import sys
-from typing import Any
 
 from secret_generator.generators import (
     generate_db_password,
@@ -12,9 +11,10 @@ from secret_generator.generators import (
     generate_random_string,
     generate_rsa_key_pair,
 )
+from secret_generator.output import format_output, save_to_file
 
 
-def generate_secrets(args) -> dict[str, dict[str, Any]]:
+def generate_secrets(args) -> dict[str, dict[str, str]]:
     """Генерация секретов на основе аргументов командной строки"""
     secrets_data = {}
 
@@ -43,32 +43,6 @@ def generate_secrets(args) -> dict[str, dict[str, Any]]:
         }
 
     return secrets_data
-
-
-def format_output(secrets_data: dict[str, dict[str, Any]]) -> str:
-    """Форматирование вывода секретов"""
-    output = []
-    output.append("⚠️ WARNING: THESE ARE SENSITIVE CREDENTIALS ⚠️")
-    output.append("⚠️ STORE THEM SECURELY AND DO NOT COMMIT TO VCS ⚠️\n")
-
-    for category, values in secrets_data.items():
-        output.append(f"=== {category} ===")
-        for key, value in values.items():
-            output.append(f"{key}:\n{value}\n")
-        output.append("")
-
-    return "\n".join(output)
-
-
-def save_to_file(content: str, filename: str) -> None:
-    """Сохранение секретов в файл"""
-    try:
-        with open(filename, "w") as f:
-            f.write(content)
-        print(f"Секреты сохранены в {filename} (убедитесь, что файл защищен!)")
-    except OSError as e:
-        print(f"Ошибка при сохранении в файл: {e}", file=sys.stderr)
-        sys.exit(1)
 
 
 def parse_arguments():
