@@ -57,7 +57,8 @@ def test_db_password_uniqueness():
 
 def test_rsa_key_pair_pem_headers():
     private_pem, public_pem = generate_rsa_key_pair()
-    assert private_pem.startswith("-----BEGIN RSA PRIVATE KEY-----")
+    assert private_pem.startswith("-----BEGIN PRIVATE KEY-----")
+    assert "BEGIN RSA PRIVATE KEY" not in private_pem
     assert public_pem.startswith("-----BEGIN PUBLIC KEY-----")
 
 
