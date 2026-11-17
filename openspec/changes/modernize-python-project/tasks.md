@@ -30,9 +30,9 @@ Each numbered group lands as one small pull request into `dev` (one or two focus
 
 ## 5. Crypto & error-handling fixes (PR: `fix/crypto-errors`)
 
-- [ ] 5.1 Switch RSA private key serialization to PKCS#8 (`BEGIN PRIVATE KEY`) and drop `default_backend()`. Verify: pytest — updated header assertion and round-trip test stay green.
-- [ ] 5.2 Remove `sys.exit()` from generators (raise on failure); `cli.main()` maps exceptions to exit 1 and `KeyboardInterrupt` to 130. Verify: pytest — a monkeypatched failing generator yields exit code 1.
-- [ ] 5.3 Validate `--db-pass N >= 1` (invalid → usage error) and turn no-selection into a usage error via `parser.error()` (exit 2); introduce shared `SPECIAL_CHARACTERS` constant. Verify: pytest — `--db-pass 0` and no-args both exit 2.
+- [x] 5.1 Switch RSA private key serialization to PKCS#8 (`BEGIN PRIVATE KEY`) and drop `default_backend()`. Verify: pytest — updated header assertion and round-trip test stay green.
+- [x] 5.2 Remove `sys.exit()` from generators (raise on failure); `cli.main()` maps exceptions to exit 1 and `KeyboardInterrupt` to 130. Verify: pytest — a monkeypatched failing generator yields exit code 1.
+- [x] 5.3 Validate `--db-pass N >= 1` (invalid → usage error) and turn no-selection into a usage error via `parser.error()` (exit 2); introduce shared `SPECIAL_CHARACTERS` constant. Verify: pytest — `--db-pass 0` and no-args both exit 2.
 
 ## 6. Secure output file handling (PR: `feat/secure-output`)
 
