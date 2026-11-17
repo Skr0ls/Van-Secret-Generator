@@ -70,6 +70,9 @@ def build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--all", action="store_true", help="Генерация всех доступных секретов")
     parser.add_argument("--output", type=str, help="Имя выходного файла (БУДЬТЕ ОСТОРОЖНЫ С ЭТИМ!)")
+    parser.add_argument(
+        "--force", action="store_true", help="Разрешить перезапись существующего файла вывода"
+    )
 
     return parser
 
@@ -90,7 +93,7 @@ def main(argv=None) -> int:
         formatted_output = format_output(secrets_data)
 
         if args.output:
-            save_to_file(formatted_output, args.output)
+            save_to_file(formatted_output, args.output, force=args.force)
         else:
             print(formatted_output)
     except KeyboardInterrupt:

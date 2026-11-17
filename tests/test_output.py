@@ -31,10 +31,31 @@ def test_save_to_file_writes_content(tmp_path, capsys):
     assert "Секреты сохранены" in capsys.readouterr().out
 
 
-def test_save_to_file_directory_target_exits(tmp_path, capsys):
+def test_save_to_file_sets_owner_only_permissions(tmp_path):
+    target = tmp_path / "out.txt"
+    save_to_file("content", str(target))
+    assert target.stat().st_mode & 0o777 == 0o600
+
+
+def test_save_to_file_refuses_existing_target(tmp_path):
+    target = tmp_path / "out.txt"
+    target.write_text("old secrets")
+    with pytest.raises(FileExistsError):
+        save_to_file("new secrets", str(target))
+    assert target.read_text() == "old secrets"
+
+
+def test_save_to_file_force_overwrites(tmp_path):
+    target = tmp_path / "out.txt"
+    target.write_text("old secrets")
+    save_to_file("new secrets", str(target), force=True)
+    assert target.read_text() == "new secrets"
+    assert target.stat().st_mode & 0o777 == 0o600
+
+
+def test_save_to_file_directory_target_raises(tmp_path):
     target = tmp_path / "adir"
     target.mkdir()
-    with pytest.raises(SystemExit) as exc_info:
+    # O_EXCL reports EEXIST on macOS and EISDIR on Linux; both are OSError.
+    with pytest.raises(OSError):
         save_to_file("content", str(target))
-    assert exc_info.value.code == 1
-    assert "Ошибка при сохранении" in capsys.readouterr().err

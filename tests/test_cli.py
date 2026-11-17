@@ -91,6 +91,24 @@ def test_output_writes_file(capsys, tmp_path):
     assert "WARNING: THESE ARE SENSITIVE CREDENTIALS" in content
     assert "HMAC_SECRET" in content
     assert "Секреты сохранены" in capsys.readouterr().out
+    assert target.stat().st_mode & 0o777 == 0o600
+
+
+def test_output_refuses_existing_file_without_force(capsys, tmp_path):
+    target = tmp_path / "secrets.txt"
+    target.write_text("old secrets")
+    assert main(["--jwt-hmac", "--output", str(target)]) == 1
+    assert target.read_text() == "old secrets"
+    assert capsys.readouterr().err
+
+
+def test_output_force_overwrites_existing_file(capsys, tmp_path):
+    target = tmp_path / "secrets.txt"
+    target.write_text("old secrets")
+    assert main(["--jwt-hmac", "--output", str(target), "--force"]) == 0
+    content = target.read_text()
+    assert "HMAC_SECRET" in content
+    assert target.stat().st_mode & 0o777 == 0o600
 
 
 def test_runtime_failure_returns_1(monkeypatch, capsys):
