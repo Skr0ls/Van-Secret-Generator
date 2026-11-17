@@ -1,5 +1,5 @@
 """
-Secret Generator - Безопасная генерация критически важных секретов для production-окружения
+Secret Generator - Secure generation of critical secrets for production environments
 """
 
 import argparse
@@ -15,10 +15,10 @@ from secret_generator.output import format_output, save_to_file
 
 
 def generate_secrets(args) -> dict[str, dict[str, str]]:
-    """Генерация секретов на основе аргументов командной строки"""
+    """Generate secrets based on command-line arguments"""
     secrets_data = {}
 
-    # Генерация JWT секретов
+    # JWT secrets
     if args.jwt_hmac or args.all:
         secrets_data.setdefault("JWT", {})["HMAC_SECRET"] = generate_jwt_hmac()
 
@@ -28,14 +28,14 @@ def generate_secrets(args) -> dict[str, dict[str, str]]:
             {"RSA_PRIVATE_KEY": private, "RSA_PUBLIC_KEY": public}
         )
 
-    # Генерация паролей БД
+    # Database passwords
     if args.db_pass or args.all:
         count = args.db_pass if args.db_pass else 2
         secrets_data["DATABASE"] = {
             f"DB_PASSWORD_{i}": generate_db_password() for i in range(1, count + 1)
         }
 
-    # Генерация секретов приложения
+    # Application secrets
     if args.app_secrets or args.all:
         secrets_data["APP_SECRETS"] = {
             "SECRET_KEY": generate_random_string(64),
@@ -48,12 +48,12 @@ def generate_secrets(args) -> dict[str, dict[str, str]]:
 def build_parser() -> argparse.ArgumentParser:
     """Build the CLI argument parser."""
     parser = argparse.ArgumentParser(
-        description="Безопасная генерация секретов для production-окружения",
+        description="Secure generation of secrets for production environments",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
 
-    parser.add_argument("--jwt-hmac", action="store_true", help="Генерация JWT HMAC секрета")
-    parser.add_argument("--jwt-rsa", action="store_true", help="Генерация пары RSA ключей для JWT")
+    parser.add_argument("--jwt-hmac", action="store_true", help="Generate a JWT HMAC secret")
+    parser.add_argument("--jwt-rsa", action="store_true", help="Generate an RSA key pair for JWT")
     parser.add_argument(
         "--db-pass",
         type=int,
@@ -61,17 +61,17 @@ def build_parser() -> argparse.ArgumentParser:
         const=2,
         default=None,
         metavar="N",
-        help="Генерация паролей для БД (укажите количество)",
+        help="Generate database passwords (optionally specify the count)",
     )
     parser.add_argument(
         "--app-secrets",
         action="store_true",
-        help="Генерация секретов приложения (SECRET_KEY и API_KEY)",
+        help="Generate application secrets (SECRET_KEY and API_KEY)",
     )
-    parser.add_argument("--all", action="store_true", help="Генерация всех доступных секретов")
-    parser.add_argument("--output", type=str, help="Имя выходного файла (БУДЬТЕ ОСТОРОЖНЫ С ЭТИМ!)")
+    parser.add_argument("--all", action="store_true", help="Generate all available secrets")
+    parser.add_argument("--output", type=str, help="Output file name (BE CAREFUL WITH THIS!)")
     parser.add_argument(
-        "--force", action="store_true", help="Разрешить перезапись существующего файла вывода"
+        "--force", action="store_true", help="Allow overwriting an existing output file"
     )
 
     return parser
@@ -97,10 +97,10 @@ def main(argv=None) -> int:
         else:
             print(formatted_output)
     except KeyboardInterrupt:
-        print("\nОперация отменена пользователем", file=sys.stderr)
+        print("\nOperation cancelled by user", file=sys.stderr)
         return 130
     except Exception as e:
-        print(f"Непредвиденная ошибка: {e}", file=sys.stderr)
+        print(f"Unexpected error: {e}", file=sys.stderr)
         return 1
 
     return 0

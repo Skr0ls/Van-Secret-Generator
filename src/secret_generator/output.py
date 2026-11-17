@@ -4,7 +4,7 @@ import os
 
 
 def format_output(secrets_data: dict[str, dict[str, str]]) -> str:
-    """Форматирование вывода секретов"""
+    """Format the secrets output."""
     output = []
     output.append("⚠️ WARNING: THESE ARE SENSITIVE CREDENTIALS ⚠️")
     output.append("⚠️ STORE THEM SECURELY AND DO NOT COMMIT TO VCS ⚠️\n")
@@ -19,10 +19,10 @@ def format_output(secrets_data: dict[str, dict[str, str]]) -> str:
 
 
 def save_to_file(content: str, filename: str, force: bool = False) -> None:
-    """Сохранение секретов в файл с правами доступа 0600
+    """Save secrets to a file with owner-only permissions (0600).
 
-    Без ``force`` существующий файл не перезаписывается (O_EXCL);
-    ошибки ОС пробрасываются вызывающему коду.
+    Without ``force`` an existing file is never overwritten (O_EXCL);
+    OS errors propagate to the caller.
     """
     flags = os.O_WRONLY | os.O_CREAT
     if force:
@@ -36,4 +36,4 @@ def save_to_file(content: str, filename: str, force: bool = False) -> None:
         os.fchmod(fd, 0o600)
     with os.fdopen(fd, "w", encoding="utf-8") as f:
         f.write(content)
-    print(f"Секреты сохранены в {filename} (убедитесь, что файл защищен!)")
+    print(f"Secrets saved to {filename} (make sure the file is protected!)")
